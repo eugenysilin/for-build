@@ -1,0 +1,21 @@
+{
+  "name": "workalize",
+  "description": "Workalize markups.",
+  "main": "",
+  "authors": [
+    "Sigmalion team"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "normalize.css": "*",
+    "jquery": "2.*"
+  }
+}
