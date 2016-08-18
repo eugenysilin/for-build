@@ -7,6 +7,7 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     sourcemaps = require('gulp-sourcemaps'),
     rigger = require('gulp-rigger'),
+    fileinclude = require('gulp-file-include'),
     cssmin = require('gulp-clean-css'),
     imagemin = require('gulp-imagemin'),
     pngquant = require('imagemin-pngquant'),
@@ -14,6 +15,7 @@ var gulp = require('gulp'),
 
 var path = {
     build: {
+        footerHtml: 'src/templates/',
         html: 'build/',
         js: 'build/js/',
         css: 'build/css/',
@@ -21,6 +23,7 @@ var path = {
         fonts: 'build/fonts/'
     },
     src: {
+        footerHtml: 'src/templates/footer-files/footer.html',
         html: 'src/*.html',
         js: 'src/js/main.js',
         style: 'src/style/main.scss',
@@ -28,6 +31,7 @@ var path = {
         fonts: 'src/fonts/**/*.*'
     },
     watch: {
+        footerHtml: 'src/templates/footer-files/footer-parts/*.html',
         html: 'src/**/*.html',
         js: 'src/js/**/*.js',
         style: 'src/style/**/*.scss',
@@ -37,9 +41,21 @@ var path = {
     clean: './build'
 };
 
+gulp.task('footerHtml:build', function () {
+gulp.src(path.src.footerHtml) // Select files on the necessary path
+    .pipe(fileinclude({
+        prefix: '@@',
+        basepath: '@file'
+    }))
+    .pipe(gulp.dest(path.build.footerHtml)); // Place the finished file in the builder
+});
+
 gulp.task('html:build', function () {
     gulp.src(path.src.html)
-        .pipe(rigger())
+        .pipe(fileinclude({
+            prefix: '@@',
+            basepath: '@file'
+        }))
         .pipe(gulp.dest(path.build.html));
 });
 
@@ -79,6 +95,7 @@ gulp.task('fonts:build', function () {
 });
 
 gulp.task('build', [
+    'footerHtml:build',
     'html:build',
     'js:build',
     'style:build',
@@ -87,6 +104,9 @@ gulp.task('build', [
 ]);
 
 gulp.task('watch', function () {
+    watch([path.watch.footerHtml], function (event, cb) {
+        gulp.start('footerHtml:build');
+    });
     watch([path.watch.html], function (event, cb) {
         gulp.start('html:build');
     });
