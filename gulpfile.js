@@ -19,7 +19,8 @@ var path = {
         html: 'build/',
         js: 'build/js/',
         css: 'build/css/',
-        img: 'build/img/',
+        img: 'build/images/',
+        fontAwesome: 'build/fonts/',
         fonts: 'build/fonts/'
     },
     src: {
@@ -27,7 +28,8 @@ var path = {
         html: 'src/*.html',
         js: 'src/js/main.js',
         style: 'src/style/main.scss',
-        img: 'src/img/**/*.*',
+        img: 'src/images/**/*.*',
+        fontAwesome: 'bower_components/fontawesome/fonts/*.*',
         fonts: 'src/fonts/**/*.*'
     },
     watch: {
@@ -35,19 +37,20 @@ var path = {
         html: 'src/**/*.html',
         js: 'src/js/**/*.js',
         style: 'src/style/**/*.scss',
-        img: 'src/img/**/*.*',
+        img: 'src/images/**/*.*',
+        fontAwesome: 'bower_components/fontawesome/fonts/*.*',
         fonts: 'src/fonts/**/*.*'
     },
     clean: './build'
 };
 
 gulp.task('footerHtml:build', function () {
-gulp.src(path.src.footerHtml) // Select files on the necessary path
-    .pipe(fileinclude({
-        prefix: '@@',
-        basepath: '@file'
-    }))
-    .pipe(gulp.dest(path.build.footerHtml)); // Place the finished file in the builder
+    gulp.src(path.src.footerHtml) // Select files on the necessary path
+        .pipe(fileinclude({
+            prefix: '@@',
+            basepath: '@file'
+        }))
+        .pipe(gulp.dest(path.build.footerHtml)); // Place the finished file in the builder
 });
 
 gulp.task('html:build', function () {
@@ -89,6 +92,11 @@ gulp.task('image:build', function () {
         .pipe(gulp.dest(path.build.img));
 });
 
+gulp.task('fontAwesome:build', function () {
+    gulp.src(path.src.fontAwesome)
+        .pipe(gulp.dest(path.build.fontAwesome))
+});
+
 gulp.task('fonts:build', function () {
     gulp.src(path.src.fonts)
         .pipe(gulp.dest(path.build.fonts))
@@ -99,6 +107,7 @@ gulp.task('build', [
     'html:build',
     'js:build',
     'style:build',
+    'fontAwesome:build',
     'fonts:build',
     'image:build'
 ]);
@@ -118,6 +127,9 @@ gulp.task('watch', function () {
     });
     watch([path.watch.img], function (event, cb) {
         gulp.start('image:build');
+    });
+    watch([path.watch.fontAwesome], function (event, cb) {
+        gulp.start('fontAwesome:build');
     });
     watch([path.watch.fonts], function (event, cb) {
         gulp.start('fonts:build');
