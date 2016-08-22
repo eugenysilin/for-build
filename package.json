@@ -21,7 +21,6 @@
     "gulp-file-include": "^0.14.0"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "minimatch": "^3.0.3"
+    
   }
 }
