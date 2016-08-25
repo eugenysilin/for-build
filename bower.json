@@ -1,6 +1,6 @@
 {
-  "name": "New Project",
-  "description": "New Project description",
+  "name": "new-project",
+  "description": "New project description",
   "main": "",
   "authors": [
     "Sigmalion team"
@@ -17,7 +17,7 @@
   "dependencies": {
     "normalize.css": "*",
     "jquery": "2.*",
-    "bootstrap-sass-official": "*",
+    "bootstrap": "*",
     "fontawesome": "*"
   }
 }

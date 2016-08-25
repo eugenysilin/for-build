@@ -1,0 +1,13 @@
+/*
+* Third Party
+*/
+@import url("./../../bower_components/normalize.css/normalize.css");
+
+@import url("./../../bower_components/fontawesome/css/font-awesome.css");
+
+@import url("../../bower_components/bootstrap/dist/css/bootstrap.css");
+
+/*
+* Custom
+*/
+@import url("./css/app-total.css");

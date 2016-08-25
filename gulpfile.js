@@ -11,13 +11,15 @@ var gulp = require('gulp'),
     cssmin = require('gulp-clean-css'),
     imagemin = require('gulp-imagemin'),
     pngquant = require('imagemin-pngquant'),
-    rimraf = require('rimraf');
+    rimraf = require('rimraf'),
+    importCss = require('gulp-import-css');
 
 var path = {
     build: {
         footerHtml: 'src/templates/',
         html: 'build/',
         js: 'build/js/',
+        sassToCss: 'src/style/css/',
         css: 'build/css/',
         img: 'build/images/',
         fontAwesome: 'build/fonts/',
@@ -27,7 +29,8 @@ var path = {
         footerHtml: 'src/templates/footer-files/footer.html',
         html: 'src/*.html',
         js: 'src/js/main.js',
-        style: 'src/style/main.scss',
+        sassToCss: 'src/style/sass/app-total.scss',
+        css: 'src/style/main.css',
         img: 'src/images/**/*.*',
         fontAwesome: 'bower_components/fontawesome/fonts/*.*',
         fonts: 'src/fonts/**/*.*'
@@ -36,7 +39,8 @@ var path = {
         footerHtml: 'src/templates/footer-files/footer-parts/*.html',
         html: 'src/**/*.html',
         js: 'src/js/**/*.js',
-        style: 'src/style/**/*.scss',
+        sassToCss: 'src/style/sass/**/*.scss',
+        css: 'src/style/css/*.css',
         img: 'src/images/**/*.*',
         fontAwesome: 'bower_components/fontawesome/fonts/*.*',
         fonts: 'src/fonts/**/*.*'
@@ -71,10 +75,16 @@ gulp.task('js:build', function () {
         .pipe(gulp.dest(path.build.js));
 });
 
-gulp.task('style:build', function () {
-    gulp.src(path.src.style)
-        .pipe(sourcemaps.init())
+gulp.task('sassToCss:build', function () {
+    gulp.src(path.src.sassToCss)
         .pipe(sass())
+        .pipe(gulp.dest(path.build.sassToCss));
+});
+
+gulp.task('css:build', function () {
+    gulp.src(path.src.css)
+        .pipe(sourcemaps.init())
+        .pipe(importCss())
         .pipe(prefixer())
         .pipe(cssmin())
         .pipe(sourcemaps.write())
@@ -94,19 +104,20 @@ gulp.task('image:build', function () {
 
 gulp.task('fontAwesome:build', function () {
     gulp.src(path.src.fontAwesome)
-        .pipe(gulp.dest(path.build.fontAwesome))
+        .pipe(gulp.dest(path.build.fontAwesome));
 });
 
 gulp.task('fonts:build', function () {
     gulp.src(path.src.fonts)
-        .pipe(gulp.dest(path.build.fonts))
+        .pipe(gulp.dest(path.build.fonts));
 });
 
 gulp.task('build', [
     'footerHtml:build',
     'html:build',
     'js:build',
-    'style:build',
+    'sassToCss:build',
+    'css:build',
     'fontAwesome:build',
     'fonts:build',
     'image:build'
@@ -119,8 +130,11 @@ gulp.task('watch', function () {
     watch([path.watch.html], function (event, cb) {
         gulp.start('html:build');
     });
-    watch([path.watch.style], function (event, cb) {
-        gulp.start('style:build');
+    watch([path.watch.sassToCss], function (event, cb) {
+        gulp.start('sassToCss:build');
+    });
+    watch([path.watch.css], function (event, cb) {
+        gulp.start('css:build');
     });
     watch([path.watch.js], function (event, cb) {
         gulp.start('js:build');
